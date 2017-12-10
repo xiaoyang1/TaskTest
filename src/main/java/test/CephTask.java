@@ -20,6 +20,7 @@ public class CephTask implements Runnable {
         int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
         this.saveFolder =new File(saveFolder.getPath() + File.separator +day + File.separator +hour) ;
+        saveFolder.mkdirs();
     }
 
     public void run() {
