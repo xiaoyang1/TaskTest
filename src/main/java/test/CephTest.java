@@ -16,6 +16,6 @@ public class CephTest {
         System.out.printf("起始时间：%s\n\n", new SimpleDateFormat("HH:mm:ss").format(new Date()));
 
         //第一个参数是指多久后开始，第二个参数是多久执行一次，第三个是单位。这里1小时执行一次。
-        timer.scheduleAtFixedRate(task,0,1, TimeUnit.HOURS);
+        timer.scheduleAtFixedRate(new CephTask(savefolder),0,1, TimeUnit.SECONDS);
     }
 }

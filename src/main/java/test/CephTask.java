@@ -18,14 +18,15 @@ public class CephTask implements Runnable {
 
     public CephTask(File saveFolder) {
         this.dateFormat = new SimpleDateFormat("HH:mm:ss");
-        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        this.saveFolder =new File(saveFolder.getPath() + File.separator +day + File.separator +hour) ;
-        saveFolder.mkdirs();
-        logger.info("创建文件夹：" + saveFolder.getPath());
+        this.saveFolder = saveFolder ;
     }
 
     public void run() {
+        int day = Calendar.getInstance().get(Calendar.DATE);
+        int hour = Calendar.getInstance().get(Calendar.SECOND);
+        File saveFolder1 =new File(saveFolder.getPath() + File.separator +day + File.separator +hour) ;
+        saveFolder1.mkdirs();
+       logger.info("创建文件夹：" + saveFolder1.getPath());
        for(int i = 0;i<50;i++){
            //开启两个线程
            Thread thread1 = new Thread(new WriteThread(2*i));
@@ -38,8 +39,8 @@ public class CephTask implements Runnable {
            } catch (InterruptedException e) {
                e.printStackTrace();
            }
-           logger.info("已经完成一个小时的文件写入任务");
        }
+       logger.info("已经完成一个小时的文件写入任务");
     }
 
     class WriteThread implements Runnable{
@@ -51,7 +52,7 @@ public class CephTask implements Runnable {
 
         @Override
         public void run() {
-            for (int count = 0;count<9999;count++){
+            for (int count = 0;count<10000;count++){
                 File newfile1 = new File(saveFolder.getPath()+ File.separator +index+ File.separator + count +".txt");
                 newfile1.getParentFile().mkdirs();
                 FileWriter  fw1 = null;
