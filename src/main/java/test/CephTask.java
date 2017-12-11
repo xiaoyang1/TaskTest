@@ -14,33 +14,35 @@ public class CephTask implements Runnable {
 
     private final SimpleDateFormat dateFormat;
 
-    private final  File saveFolder;  //文件路径只到文件夹外部
+    private final File saveFolder;  //文件路径只到文件夹外部
+    private  File folder;
 
     public CephTask(File saveFolder) {
         this.dateFormat = new SimpleDateFormat("HH:mm:ss");
-        this.saveFolder = saveFolder ;
+        this.saveFolder = saveFolder;
     }
 
     public void run() {
         int day = Calendar.getInstance().get(Calendar.DATE);
         int hour = Calendar.getInstance().get(Calendar.SECOND);
-        File saveFolder1 =new File(saveFolder.getPath() + File.separator +day + File.separator +hour) ;
-        saveFolder1.mkdirs();
-       logger.info("创建文件夹：" + saveFolder1.getPath());
-       for(int i = 0;i<50;i++){
-           //开启两个线程
-           Thread thread1 = new Thread(new WriteThread(2*i));
-           Thread thread2 = new Thread(new WriteThread(2*i+1));
-           thread1.start();
-           thread2.start();
-           try {
+        this.folder =new File(this.saveFolder.getPath() + File.separator +day + File.separator +hour) ;
+        this.folder.mkdirs();
+        logger.info("创建文件夹：" + this.folder.getPath());
+        for(int i = 0;i<50;i++){
+
+            //开启两个线程
+            Thread thread1 = new Thread(new WriteThread(2*i));
+            Thread thread2 = new Thread(new WriteThread(2*i+1));
+            thread1.start();
+            thread2.start();
+            try {
                thread1.join();
                thread2.join();
-           } catch (InterruptedException e) {
-               e.printStackTrace();
-           }
-       }
-       logger.info("已经完成一个小时的文件写入任务");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        logger.info("已经完成一个小时的文件写入任务");
     }
 
     class WriteThread implements Runnable{
@@ -53,7 +55,7 @@ public class CephTask implements Runnable {
         @Override
         public void run() {
             for (int count = 0;count<10000;count++){
-                File newfile1 = new File(saveFolder.getPath()+ File.separator +index+ File.separator + count +".txt");
+                File newfile1 = new File(folder.getPath()+ File.separator +index+ File.separator + count +".txt");
                 newfile1.getParentFile().mkdirs();
                 FileWriter  fw1 = null;
                 try {
